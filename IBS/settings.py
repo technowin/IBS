@@ -29,8 +29,8 @@ DATABASES = {
         'NAME': 'ibs_db',      # Replace with your database name
         'USER': 'root',      # Replace with your database user
         'PASSWORD': 'Mysql_MH-047319',  # Replace with your database password
-        'HOST': '3.109.244.102',       # IP FOR TEST
-        # 'HOST': '127.0.0.1',       # IP FOR LOCAL VM
+        # 'HOST': '3.109.244.102',       # IP FOR TEST
+        'HOST': '127.0.0.1',       # IP FOR LOCAL VM
         'PORT': '3306',            
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
