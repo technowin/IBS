@@ -25,9 +25,9 @@ pip install django gunicorn
 
 sudo ufw allow 8000
 
-python3 manage.py runserver  172.26.13.184:8000     
+python3 manage.py runserver  172.26.14.94:8000     
 
-gunicorn --bind 172.26.10.7:8000 IBS.wsgi   
+gunicorn --bind 172.26.14.94:8000 IBS.wsgi   
 
 deactivate
 
@@ -69,17 +69,17 @@ WantedBy=multi-user.target
 sudo systemctl start gunicorn.socket
 sudo systemctl enable gunicorn.socket
 
-sudo vim /etc/nginx/sites-available/PSN
+sudo vim /etc/nginx/sites-available/IBS
 
 Enter i and then paste below part then for save Enter Esc :wq
 
 server {
     listen 80;
-    server_name 172.26.10.7;
+    server_name 172.26.14.94;
 
     location = /favicon.ico { access_log off; log_not_found off; }
     location /static/ {
-        root /home/ubuntu/PSN;
+        root /home/ubuntu/IBS;
     }
 
     location / {
@@ -88,7 +88,7 @@ server {
     }
 }
 
-sudo ln -s /etc/nginx/sites-available/PSN /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/IBS /etc/nginx/sites-enabled/
 
 cd /etc/nginx/sites-available/
 
