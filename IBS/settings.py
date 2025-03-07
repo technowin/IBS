@@ -13,12 +13,12 @@ from pathlib import Path
 import os
 from datetime import timedelta
 
-# ALLOWED_HOSTS = ['13.127.171.88']
+ALLOWED_HOSTS = ['3.109.244.102']
 # ALLOWED_HOSTS = ['127.0.0.1']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = False
-DEBUG = True   
+DEBUG = False
+# DEBUG = True   
 
 
 
@@ -28,8 +28,8 @@ DATABASES = {
         'ENGINE': 'mysql.connector.django',
         'NAME': 'ibs_db',      # Replace with your database name
         'USER': 'root',      # Replace with your database user
-        'PASSWORD': 'Mysql_7319',  # Replace with your database password
-        'HOST': '13.127.171.88',       # IP FOR TEST
+        'PASSWORD': 'Mysql_MH-047319',  # Replace with your database password
+        'HOST': '3.109.244.102',       # IP FOR TEST
         # 'HOST': '127.0.0.1',       # IP FOR LOCAL VM
         'PORT': '3306',            
         'OPTIONS': {
@@ -41,8 +41,8 @@ DATABASES = {
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'D:/Python Project/Documents/')
-# MEDIA_ROOT = os.path.join(BASE_DIR, '/home/ubuntu/Documents/')
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'D:/Python Project/Documents/')
+MEDIA_ROOT = os.path.join(BASE_DIR, '/home/ubuntu/Documents/')
 MEDIA_URL = '/media/'
 
 SECURE_CROSS_ORIGIN_OPENER_POLICY = None
@@ -116,11 +116,11 @@ MIDDLEWARE = [
     'axes.middleware.AxesMiddleware',
 ]
 CORS_ALLOWED_ORIGINS = [
-    'http://13.127.171.88',
+    'http://3.109.244.102',
 ]
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = [
-    'http://13.127.171.88',
+    'http://3.109.244.102',
 ]
 AUTO_LOGOUT = {
     'IDLE_TIME': 3600,
@@ -142,8 +142,8 @@ LOGGING = {
         'file': {
             'level': 'WARNING',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'D:/Python Project/IBS Logs', 'django.log'),  
-            # 'filename': os.path.join(BASE_DIR, '/home/ubuntu/IBS Logs', 'django.log'),  
+            # 'filename': os.path.join(BASE_DIR, 'D:/Python Project/IBS Logs', 'django.log'),  
+            'filename': os.path.join(BASE_DIR, '/home/ubuntu/IBS Logs', 'django.log'),  
         },
     },
     'loggers': {
