@@ -1,0 +1,47 @@
+  .orangebell {
+    margin-left: 2%;
+    width: 20px;
+    height: 20px;
+    font-size: 16px;
+    color: #F6761F;
+    animation: swing 0.4s ease-in-out infinite;
+    transform-origin: 50% 0; 
+  }
+  .greenbell {
+    margin-left: 2%;
+    width: 20px;
+    height: 20px;
+    font-size: 16px;
+    color: green;
+    animation: swing 0.4s ease-in-out infinite;
+    transform-origin: 50% 0; 
+  }
+  .redbell {
+    margin-left: 2%;
+    width: 20px;
+    height: 20px;
+    font-size: 16px;
+    color: red;
+    animation: swing 0.4s ease-in-out infinite;
+    transform-origin: 50% 0; 
+  }
+  
+  @keyframes swing {
+    0% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(30deg);
+    }
+    50% {
+      transform: rotate(0deg);
+    }
+    75% {
+      transform: rotate(-30deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+  
+  
