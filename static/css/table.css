@@ -39,11 +39,11 @@
   }
 
   .responsive-table thead th {
-    background-color: #A7C4FF;
-    border: 1px solid #A7C4FF;
+    background-color: #80A95C;
+    border: 1px solid #80A95C;
     font-weight: normal;
     text-align: center;
-    color: white;
+    color: black;
   }
 
   .responsive-table thead th:first-of-type {
@@ -153,14 +153,14 @@
   }
 
   .responsive-table tbody th[scope="row"] {
-    background-color: #A7C4FF;
+    background-color: #80A95C;
     color: white;
   }
 
   @media (min-width: 30em) {
     .responsive-table tbody th[scope="row"] {
-      border-left: 1px solid #A7C4FF;
-      border-bottom: 1px solid #A7C4FF;
+      border-left: 1px solid #80A95C;
+      border-bottom: 1px solid #80A95C;
     }
   }
 
@@ -178,15 +178,15 @@
 
   @media (min-width: 48em) {
     .responsive-table tbody td {
-      border-left: 1px solid #A7C4FF;
-      border-bottom: 1px solid #A7C4FF;
+      border-left: 1px solid #80A95C;
+      border-bottom: 1px solid #80A95C;
       text-align: center;
     }
   }
 
   @media (min-width: 48em) {
     .responsive-table tbody td:last-of-type {
-      border-right: 1px solid #A7C4FF;
+      border-right: 1px solid #80A95C;
     }
   }
 

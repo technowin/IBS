@@ -69,7 +69,7 @@
 #excelFile::file-selector-button {
   margin-right: 20px;
   border: none;
-  background: #4e73df;
+  background: #5B913B;
   padding: 10px 20px;
   border-radius: 10px;
   color: #fff;
@@ -78,5 +78,5 @@
 }
 
 #excelFile::file-selector-button:hover {
-  background: #4e73df;
+  background: #5B913B;
 }
