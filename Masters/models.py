@@ -136,7 +136,7 @@ class course(models.Model):
     
 class course_faculty(models.Model):
     course_id = models.TextField(null=True,blank=True)
-    ssemester_id = models.TextField(null=True,blank=True)
+    semester_id = models.TextField(null=True,blank=True)
     faculty_id = models.TextField(null=True,blank=True)
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     created_by = models.TextField(null=True, blank=True)
@@ -157,12 +157,6 @@ class course_section_faculty(models.Model):
     class Meta:
         db_table = 'course_section_faculty'
 
-class days(models.Model):
-    name = models.TextField(null=True,blank=True)
-    def __str__(self):
-        return self.name 
-    class Meta:
-        db_table = 'days'
         
 class schedule(models.Model):
     class_id = models.TextField(null=True,blank=True)
