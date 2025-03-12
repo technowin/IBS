@@ -60,13 +60,22 @@ def common_html(request):
             global user
             user = request.user.id
             entity =request.GET.get('entity', '')  
+            title,note ='',''
             if request.method=="GET":
                 filter_name = callproc("stp_get_filter_names",[entity])          
                 column_name = callproc("stp_get_column_names",[entity])        
                 result = callproc("stp_get_report_title", [entity])
                 if result and result[0]:
-                    for items in result[0]:
-                        title, note = items
+                    items = result[0][0] 
+                    if isinstance(items, tuple):
+                        if len(items) == 2:
+                            title, note = items
+                        elif len(items) == 1:
+                            title = items[0]
+                            note = ''
+                    else:
+                        title = items
+                        note = ''
                 saved_names = callproc("stp_get_saved_filters",[entity,user])        
 
     except Exception as e:
@@ -200,15 +209,15 @@ def common_fun(columnName,filterid,SubFilterId,sft,entity,user):
         mandatory_arr= []
         result_data = callproc("stp_get_report_filters", [entity])
         if result_data and result_data[0]:
-            for row in result_data[0]:
+            for row in result_data:
                 report_filters.append(list(row))
         result_data =callproc("stp_get_report_columns", [entity])
         if result_data and result_data[0]:
-            for row in result_data[0]:
+            for row in result_data:
                 report_columns.append(list(row))
         result_data = callproc("stp_get_column_join", [entity])
         if result_data and result_data[0]:
-            for row in result_data[0]:
+            for row in result_data:
                 column_join_list.append(list(row))
         result_data = callproc("stp_get_mandatory", [entity])
         mandf = ''
@@ -270,13 +279,6 @@ def common_fun(columnName,filterid,SubFilterId,sft,entity,user):
         
         column_name = callproc("stp_get_dispay_names",[entity])        
         
-        result_data = callproc("get_user_role_map",[user])   
-        company = '' 
-        worksite = ''
-        if result_data and result_data[0]:  
-            for items in result_data[0]:  
-                company = items[0]  
-                worksite = items[1]
                 
         if columnName == '': 
             column_name_arr = [col[0] for col in column_name] 
@@ -304,28 +306,13 @@ def common_fun(columnName,filterid,SubFilterId,sft,entity,user):
             join_clause += dr[2] + " "
         for z in range(len(filterid)):
             if where_clause1[z] not in where_clause:
-                if not where_clause:
+                if where_clause != '':
                     where_clause = " where " + where_clause1[z]
                 else:
                     where_clause += " and " + where_clause1[z]
-                    
-        if not where_clause:
-            where_extra = " where "
-        else: where_extra = " and "
-        
-        if entity in ['em']:
-            where_extra += "worksite in (" + str(worksite) + ")"
-        elif entity in ['cm']:
-            where_extra += "company_id in (" + str(company) + ")"
-        elif entity in ['sm']:
-            where_extra += "t1.company_id in (" + str(company) + ") and site_name in (" + str(worksite) + ")"
-        elif entity in ['r']:
-            where_extra += "t1.company_id in (" + str(company) + ") and worksite in (" + str(worksite) + ")"
-        elif entity in ['nr']:
-            where_extra += "t2.company_id in (" + str(company) + ") and t3.worksite in (" + str(worksite) + ")"
                             
-            if join_query1[z] not in join_clause:
-                join_clause += join_query1[z]
+        if join_query1[z] not in join_clause:
+            join_clause += join_query1[z]
 
         sql_query = "Select " + columns + " " + from_clause + " " + join_clause + " " + where_clause + " " + where_extra + " " + group_by + " " + order_by
         
@@ -344,7 +331,7 @@ def common_fun(columnName,filterid,SubFilterId,sft,entity,user):
         if ch == 0:
             result_data = callproc("stp_get_execute_report_query", [sql_query])
             if result_data and result_data[0]:
-                for row in result_data[0]:
+                for row in result_data:
                     data_list.append(list(row))
       
         display_name_list = list(display_name_arr)
