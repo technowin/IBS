@@ -13,7 +13,7 @@
 
 .item{
 color:black;
-background-color: #A7C4FF;
+background-color: #A6C788;
 }
 .selectize-input, .selectize-control.single .selectize-input.input-active {
   background: #fff;
@@ -62,12 +62,12 @@ background-color: #A7C4FF;
     cursor: pointer;
     margin: 0 3px 3px 0;
     padding: 1px 3px;
-    background: #A7C4FF;
+    background: #A6C788;
    /* color: #f8f9fa;*/
     border: 0 solid #999;
 }
     .selectize-control.multi .selectize-input > div.active {
-      background: #A7C4FF;
+      background: #A6C788;
       color: #fff;
       border: 0 solid rgba(0, 0, 0, 0); }
   .selectize-control.multi .selectize-input.disabled > div, .selectize-control.multi .selectize-input.disabled > div.active {

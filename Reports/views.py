@@ -306,7 +306,7 @@ def common_fun(columnName,filterid,SubFilterId,sft,entity,user):
             join_clause += dr[2] + " "
         for z in range(len(filterid)):
             if where_clause1[z] not in where_clause:
-                if where_clause != '':
+                if not where_clause:
                     where_clause = " where " + where_clause1[z]
                 else:
                     where_clause += " and " + where_clause1[z]
@@ -398,7 +398,7 @@ def report_pdf(request):
                 result_data = callproc("stp_get_report_title", [entity])
                 title = ''
                 if result_data and result_data[0]:
-                    for items in result_data[0]:  
+                    for items in result_data:  
                         title = items[0]
                         
                 html_string = render_to_string('Reports/report_template.html', {
@@ -446,14 +446,14 @@ def report_xlsx(request):
                 result_data = callproc("stp_get_report_title", [entity])
                 title = ''
                 if result_data and result_data[0]:
-                    for items in result_data[0]:  
+                    for items in result_data:  
                         title = items[0]
 
                 output = io.BytesIO()
                 workbook = xlsxwriter.Workbook(output)
                 worksheet = workbook.add_worksheet(str(entity))
 
-                worksheet.insert_image('A1', 'static/images/IBS-logo0.png', {'x_offset': 10, 'y_offset': 10, 'x_scale': 0.5, 'y_scale': 0.5})
+                worksheet.insert_image('A1', 'static/images/IBS logo.png', {'x_offset': 10, 'y_offset': 10, 'x_scale': 0.5, 'y_scale': 0.5})
 
                 header_format = workbook.add_format({'align': 'center', 'bold': True, 'font_size': 14})
                 data_format = workbook.add_format({'border': 1})
@@ -462,7 +462,7 @@ def report_xlsx(request):
                 filter_format = workbook.add_format({'bold': True})
                 worksheet.write(5, 0, headers, filter_format)
 
-                header_format = workbook.add_format({'bold': True, 'bg_color': '#DD8C8D', 'font_color': 'black'})
+                header_format = workbook.add_format({'bold': True, 'bg_color': '#80A95C', 'font_color': 'black'})
                 for i, column_name in enumerate(column_list):
                     worksheet.write(6, i, column_name, header_format)
 
@@ -552,7 +552,7 @@ def saved_filters(request):
                 result_data  = callproc("stp_get_saved_report_filters",[saved_id,entity,user])
                 filters, sub_filters, selected_columns, f_count, display_name, sql_query = ('',) * 6  # Initialize variables
                 if result_data and result_data[0]: 
-                    for items in result_data[0]: 
+                    for items in result_data: 
                         filters, sub_filters, selected_columns, f_count, display_name, sql_query = items 
 
                 display_name_arr = display_name.split(',')
@@ -572,7 +572,7 @@ def saved_filters(request):
                 data_list= []
                 result_data  = callproc("stp_get_execute_report_query", [sql_query])
                 if result_data and result_data[0]:
-                    for row in result_data[0]:
+                    for row in result_data:
                         data_list.append(list(row))
 
                 if len(data_list) > 0:
