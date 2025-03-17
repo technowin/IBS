@@ -90,7 +90,7 @@ def register_new_user(request):
         service = callproc("stp_get_dropdown_values",['service'])
         
         if id != '0':
-            id1 = decrypt_parameter(id)
+            id1 = dec(id)
             users = get_object_or_404(CustomUser, id=id1)
             full_name = users.full_name.split(" ", 1) 
             first_name = full_name[0] 

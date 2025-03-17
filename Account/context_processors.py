@@ -1,5 +1,5 @@
 from django.conf import settings
-from IBS.encryption import decrypt_parameter
+from IBS.encryption import dec
 import Db
 from Db import callproc
 from django.utils import timezone

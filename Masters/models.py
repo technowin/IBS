@@ -73,8 +73,8 @@ class classroom(models.Model):
         db_table = 'classroom'
     
 class timeslot(models.Model):
-    start_time = models.TimeField()
-    end_time = models.TimeField()
+    start_time = models.TimeField(null=True, blank=True)
+    end_time = models.TimeField(null=True, blank=True)
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     created_by = models.TextField(null=True, blank=True)
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
@@ -233,8 +233,8 @@ class student_face_recog(models.Model):
 class student_attendance(models.Model):
     face_recog_mid = models.TextField(null=True,blank=True)
     face_id = models.TextField(null=True,blank=True)
-    date = models.TextField(null=True,blank=True)
-    time = models.TextField(null=True,blank=True)
+    date = models.DateTimeField(null=True, blank=True, auto_now=True)
+    time = models.TimeField(null=True, blank=True)
     created_at = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     created_by = models.TextField(null=True, blank=True)
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)

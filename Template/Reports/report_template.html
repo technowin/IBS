@@ -30,11 +30,13 @@
             height: auto;
         }
         .report-header {
+            margin-left: 80px;
+            margin-right: 100px;
             margin-bottom: 20px;
         }
         .report-header p {
             margin: 5px 0;
-            font-size:12px;
+            font-size:14px;
         }
         table {
             width: 100%;
@@ -46,6 +48,7 @@
             padding: 8px;
             text-align: left;
             word-wrap: break-word;
+            font-size:12px;
         }
         th {
             background-color: #A6C788;
@@ -80,8 +83,13 @@
     </div>
 
     <div class="report-header">
-        <p><strong>{{ headers }}</strong></p>
+        <p style="flex: 0 0 16.6667%; max-width: 16.6667%;"></p>
+        <p style="flex: 0 0 66.6667%; max-width: 66.6667%;">
+            <p><strong>{{ headers }}</strong></p>
+        </p>
+        <p style="flex: 0 0 16.6667%; max-width: 16.6667%;"></p>
     </div>
+    
     <table>
         <thead>
             <tr>

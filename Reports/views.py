@@ -66,7 +66,7 @@ def common_html(request):
                 column_name = callproc("stp_get_column_names",[entity])        
                 result = callproc("stp_get_report_title", [entity])
                 if result and result[0]:
-                    items = result[0][0] 
+                    items = result[0] 
                     if isinstance(items, tuple):
                         if len(items) == 2:
                             title, note = items
@@ -452,26 +452,42 @@ def report_xlsx(request):
                 output = io.BytesIO()
                 workbook = xlsxwriter.Workbook(output)
                 worksheet = workbook.add_worksheet(str(entity))
-
-                worksheet.insert_image('A1', 'static/images/IBS logo.png', {'x_offset': 10, 'y_offset': 10, 'x_scale': 0.5, 'y_scale': 0.5})
-
+            
+                # Inserting the logo with a reduced size, ensuring it doesn't overlap
+                worksheet.insert_image('A1', 'static/images/IBS logo.png', {'x_offset': 1, 'y_offset': 1, 'x_scale': 0.04, 'y_scale': 0.04})  # Reduced size
+            
+                # Header Format
                 header_format = workbook.add_format({'align': 'center', 'bold': True, 'font_size': 14})
+                
+                # Data Format
                 data_format = workbook.add_format({'border': 1})
-                worksheet.merge_range('A4:{}'.format(chr(65+len(column_list)-1)+'2'), title, header_format)
-
+            
+                # Merge header cell for the title
+                worksheet.merge_range('A4:{}'.format(chr(65 + len(column_list) - 1) + '2'), title, header_format)
+            
+                # Add the header row
                 filter_format = workbook.add_format({'bold': True})
                 worksheet.write(5, 0, headers, filter_format)
-
+            
+                # Header Row Format (Column Names)
                 header_format = workbook.add_format({'bold': True, 'bg_color': '#80A95C', 'font_color': 'black'})
                 for i, column_name in enumerate(column_list):
                     worksheet.write(6, i, column_name, header_format)
-
+            
+                # Write the data rows
                 for row_num, row_data in enumerate(data_list, start=7):
                     for col_num, col_data in enumerate(row_data):
-                        worksheet.write(row_num, col_num, col_data,data_format)
+                        worksheet.write(row_num, col_num, str(col_data), data_format)
+            
+                # Auto-adjust columns based on content length (Auto width)
+                for col_num in range(len(column_list)):
+                    worksheet.set_column(col_num, col_num, max(len(str(cell)) for cell in [row[col_num] for row in data_list] + [column_list[col_num]]))
+            
                 workbook.close()
+            
+                # Prepare the response to send the generated Excel file
                 response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-                response['Content-Disposition'] = 'attachment; filename="' + str(title) + '.xlsx"'
+                response['Content-Disposition'] = f'attachment; filename="{title}.xlsx"'
                 output.seek(0)
                 response.write(output.read())
     except Exception as e:
