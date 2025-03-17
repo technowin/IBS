@@ -45,6 +45,7 @@ urlpatterns = [
     # Masters
     path('masters/', masters, name='masters'),
     path('time_table/', time_table, name='time_table'),
+    path('timetable_xlsx/', timetable_xlsx, name='timetable_xlsx'),
 
     #Reports 
     path('common_html', common_html, name='common_html'),

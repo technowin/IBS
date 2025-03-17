@@ -105,7 +105,7 @@
                                 <td>
                                   <a href="{% if entity == 'user' %}/register_new_user?id={{ row.0 }} {% elif entity == 'tt' %}/time_table?id={{ row.0 }}{% endif %}" class="btn btn-md btn-primary">Edit</a>
                                   {% if entity == 'tt' %}
-                                    <button type="button" value="Excel" class="btn btn-md btn-primary" id="btn_excel">Download &nbsp; <i class="fa fa-file-excel"></i></button>
+                                    <a type="button" href="/timetable_xlsx?id={{ row.0 }}" value="Excel" class="btn btn-md btn-primary" id="btn_excel">Download &nbsp; <i class="fa fa-file-excel"></i></a>
                                   {% endif %}
                                 </td>
                             </tr>

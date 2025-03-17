@@ -48,6 +48,8 @@ from django.http import FileResponse, Http404
 import mimetypes
 logger = logging.getLogger(__name__)
 from collections import defaultdict
+import xlsxwriter
+from io import BytesIO
 
 @login_required
 def masters(request):
@@ -175,3 +177,93 @@ def convert_defaultdict_to_dict(d):
     elif isinstance(d, list):
         return [convert_defaultdict_to_dict(i) if isinstance(i, defaultdict) else i for i in d]
     return d
+
+def timetable_xlsx(request):
+    output = BytesIO()
+    workbook = xlsxwriter.Workbook(output, {'in_memory': True})
+    bold_format = workbook.add_format({'bold': True, 'align': 'center','bg_color': '#AAD08B', 'valign': 'vcenter', 'border': 1, 'font_size': 12})
+    cell_format = workbook.add_format({'align': 'center', 'valign': 'vcenter', 'border': 1})
+    header_format = workbook.add_format({'bold': True, 'bg_color': '#AAD08B', 'align': 'center', 'border': 1, 'font_size': 14})
+    timeslot_format = workbook.add_format({'bold': True, 'align': 'center', 'bg_color': '#AAD08B', 'border': 1,'font_size': 14})
+    timetable = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
+    user = request.session.get('user_id', '')
+    
+    try:
+        if request.method == "GET":
+            id1 = request.GET.get('id', '')
+            if id1:
+                id = dec(id1).split('_')
+                rows = callproc("stp_get_timetable_xlsx", [id[0], id[1], user])
+                for row1 in rows:
+                    class_name, day, timeslot = row1[0], row1[1], row1[2]
+                    section, course_code, course_title, faculty_name, classroom = row1[3:]
+                    timetable[class_name][day][timeslot].append({
+                        'section': section,
+                        'course_code': course_code,
+                        'course_title': course_title,
+                        'faculty_name': faculty_name,
+                        'classroom': classroom,
+                    })
+
+            timetable = convert_defaultdict_to_dict(timetable)
+
+            for class_name, days in timetable.items():
+                worksheet = workbook.add_worksheet(class_name[:31])
+                row = 0
+
+                worksheet.merge_range(row, 0, row + 1, 14, f"{class_name}", header_format)
+                row += 3
+
+                for day, timeslots in days.items():
+                    worksheet.merge_range(row, 0, row, 14, day, header_format)
+                    row += 1
+
+                    timeslot_columns = list(timeslots.keys())
+                    timeslot_count = len(timeslot_columns)
+                    total_columns = timeslot_count * 5  # 5 columns per timeslot
+
+                    for i, timeslot in enumerate(timeslot_columns):
+                        start_col = i * 5  # Each timeslot takes exactly 5 columns
+                        end_col = start_col + 4  # Merge 5 columns
+                        worksheet.merge_range(row, start_col, row, end_col, timeslot, timeslot_format)
+                    row += 2
+
+                    headers = ["Section", "Course", "Course Title", "Faculty Name", "Classroom"]
+                    for i, timeslot in enumerate(timeslot_columns):
+                        start_col = i * 5
+                        for j, header in enumerate(headers):
+                            worksheet.write(row, start_col + j, header, bold_format)
+                    row += 1
+
+                    max_rows = max(len(details) for details in timeslots.values())
+
+                    col_widths = [len(h) for h in headers] * timeslot_count  # Initialize with header lengths
+                    
+                    for r in range(max_rows):
+                        for i, timeslot in enumerate(timeslot_columns):
+                            details = timeslots[timeslot]
+                            start_col = i * 5
+                            if r < len(details):
+                                item = details[r]
+                                values = [item['section'], item['course_code'], item['course_title'], item['faculty_name'], item['classroom']]
+                                for j, value in enumerate(values):
+                                    worksheet.write(row, start_col + j, value, cell_format)
+                                    col_widths[start_col + j] = max(col_widths[start_col + j], len(str(value)))
+                        row += 1
+                    row += 1
+                
+                # Auto-adjust column widths based on data length
+                for col_num, width in enumerate(col_widths):
+                    worksheet.set_column(col_num, col_num, width + 2)  # Adjust width with padding
+                
+        workbook.close()
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename="TimeTable.xlsx"'
+        output.seek(0)
+        response.write(output.read())
+        return response
+    except Exception as e:
+        tb = traceback.extract_tb(e.__traceback__)
+        fun = tb[0].name
+        callproc("stp_error_log", [fun, str(e), user])  
+        messages.error(request, 'Oops...! Something went wrong!')
