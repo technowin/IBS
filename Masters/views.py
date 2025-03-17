@@ -121,12 +121,13 @@ def time_table(request):
                 rows = callproc("stp_get_etimetable",[id[0],id[1],user])
                 for row in rows:
                     class_name, day, timeslot = row[0], row[1], row[2]
-                    section, course, faculty_name, classroom = row[3], row[4], row[5], row[6]
+                    section, course, faculty_name, classroom, ttid = row[3], row[4], row[5], row[6], row[7] 
                     timetable[class_name][day][timeslot].append({
                         'section': section,
                         'course': course,
                         'faculty_name': faculty_name,
-                        'classroom': classroom
+                        'classroom': classroom,
+                        'ttid': enc(str(ttid))
                     })
 
             timetable = convert_defaultdict_to_dict(timetable)
@@ -148,9 +149,10 @@ def time_table(request):
                         course = request.POST.get(f"course_{day_index}_{slot_index}_{row_index}")
                         faculty_name = request.POST.get(f"faculty_name_{day_index}_{slot_index}_{row_index}")
                         classroom = request.POST.get(f"classroom_{day_index}_{slot_index}_{row_index}")
+                        ttid = request.POST.get(f"ttid_{day_index}_{slot_index}_{row_index}")
 
                         if timeslot and section and course and faculty_name and classroom:
-                            callproc("stp_update_etimetable", [id[0],id[1],timeslot, section, course, faculty_name, classroom, user])
+                            callproc("stp_update_etimetable", [dec(ttid),id[0],id[1],timeslot, section, course, faculty_name, classroom, user])
 
             messages.success(request, 'Data updated successfully !')
                           

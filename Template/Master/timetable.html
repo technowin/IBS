@@ -69,23 +69,22 @@
     {% csrf_token %}
     <input type="hidden" id="id1" name="id1" value="{{id1}}">
     {% for class_name, days in timetable.items %}
-        <div style="border: 1px solid black;zoom:70%;background-color: #aad08b;" >
-            <h1 style="text-align: center;color: black;font-weight: 600;">{{ class_name }}</h1>
+        <div style="border: 1px solid black;zoom:80%;background-color: #aad08b;" >
+            <h1 style="text-align: center;color: black;font-weight: bold;">{{ class_name }}</h1>
         </div>
-        <div class="scroll-container " style="zoom:70%;" >
+        <div class="scroll-container " style="zoom:80%;" >
             <table>
                 {% for day_index, day, timeslots in days|enumerate_dict %}
                     <tr>
-                        <th colspan="{{ timeslots|length|add:1 }}" style="background-color: #aad08b;color: black;"> <h1 style="color: black;font-weight: 600;">{{ day }} </h1></th>
+                        <th colspan="{{ timeslots|length|add:1 }}" style="background-color: #aad08b;color: black;"> <h1 style="color: black;">{{ day }} </h1></th>
                     </tr>
                     <tr style="text-align:center;">
                         {% for timeslot_index, timeslot, details in timeslots|enumerate_dict %}
                             <th style="text-align:center;">
                                 <select name="timeslot_{{ day_index }}_{{ timeslot_index }}" style="font-size:25px;border-radius:10em;background-color: #aad08b;color: black;"  class=" select">
-                                    <option value="{{ timeslot }}" selected>{{ timeslot }}</option>
-                                    <option value="08:30 AM to 11:15 AM">08:30 AM to 11:15 AM</option>
-                                    <option value="12:15 PM to 3:00 PM">12:15 PM to 3:00 PM</option>
-                                    <option value="3:45 PM to 6:30 PM">3:45 PM to 6:30 PM</option>
+                                    {% for data in td %}
+                                        <option value="{{ data.0 }}" {% if data.0|to_str == timeslot|to_str %}selected{% endif %}>{{ data.1 }}</option>
+                                    {% endfor %}
                                 </select>
                             </th>
                         {% endfor %}
@@ -104,33 +103,34 @@
                                     </tr>
                                     {% for row_index, item in details|enumerate_list %}
                                         <tr>
+                                            <input type="hidden" id="ttid" name="ttid_{{ day_index }}_{{ timeslot_index }}_{{ row_index }}" value="{{item.ttid}}">
+
                                             <td>
-                                                <select  style="border-radius:10em;background-color: rgb(219, 239, 200) ;"  class="form-control select" name="section_{{ day_index }}_{{ timeslot_index }}_{{ row_index }}">
-                                                    <option value="{{ item.section }}" selected>{{ item.section }}</option>
-                                                    <option value="A">A</option>
-                                                    <option value="B">B</option>
-                                                    <option value="C">C</option>
+                                                <select style="border-radius:10em;background-color: rgb(219, 239, 200)  ;"  class="form-control select" name="section_{{ day_index }}_{{ timeslot_index }}_{{ row_index }}">
+                                                    {% for data in sd %}
+                                                        <option value="{{ data.0 }}" {% if data.0|to_str == item.section|to_str %}selected{% endif %}>{{ data.1 }}</option>
+                                                    {% endfor %}
                                                 </select>
                                             </td>
                                             <td>
                                                 <select style="border-radius:10em;background-color: rgb(219, 239, 200)  ;"  class="form-control select" name="course_{{ day_index }}_{{ timeslot_index }}_{{ row_index }}">
-                                                    <option value="{{ item.course }}" selected>{{ item.course }}</option>
-                                                    <option value="CS101">CS101</option>
-                                                    <option value="PHY101">PHY101</option>
+                                                    {% for data in cd %}
+                                                        <option value="{{ data.0 }}" {% if data.0|to_str == item.course|to_str %}selected{% endif %}>{{ data.1 }}</option>
+                                                    {% endfor %}
                                                 </select>
                                             </td>
                                             <td>
                                                 <select style="border-radius:10em;background-color: rgb(219, 239, 200)  ;"  class="form-control select" name="faculty_name_{{ day_index }}_{{ timeslot_index }}_{{ row_index }}">
-                                                    <option value="{{ item.faculty_name }}" selected>{{ item.faculty_name }}</option>
-                                                    <option value="Dr. John Smith">Dr. John Smith</option>
-                                                    <option value="Prof. Laura Adams">Prof. Laura Adams</option>
+                                                    {% for data in fd %}
+                                                        <option value="{{ data.0 }}" {% if data.0|to_str == item.faculty_name|to_str %}selected{% endif %}>{{ data.1 }}</option>
+                                                    {% endfor %}
                                                 </select>
                                             </td>
                                             <td>
                                                 <select style="border-radius:10em;background-color: rgb(219, 239, 200)  ;"  class="form-control select" name="classroom_{{ day_index }}_{{ timeslot_index }}_{{ row_index }}">
-                                                    <option value="{{ item.classroom }}" selected>{{ item.classroom }}</option>
-                                                    <option value="Room 101">Room 101</option>
-                                                    <option value="Computer Science Lab">Computer Science Lab</option>
+                                                    {% for data in crd %}
+                                                        <option value="{{ data.0 }}" {% if data.0|to_str == item.classroom|to_str %}selected{% endif %}>{{ data.1 }}</option>
+                                                    {% endfor %}
                                                 </select>
                                             </td>
                                         </tr>
