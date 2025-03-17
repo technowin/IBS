@@ -70,13 +70,13 @@
     <input type="hidden" id="id1" name="id1" value="{{id1}}">
     {% for class_name, days in timetable.items %}
         <div style="border: 1px solid black;zoom:80%;background-color: #aad08b;" >
-            <h1 style="text-align: center;color: black;font-weight: bold;">{{ class_name }}</h1>
+            <h1 style="text-align: center;color: black;font-weight: 600;">{{ class_name }}</h1>
         </div>
         <div class="scroll-container " style="zoom:80%;" >
             <table>
                 {% for day_index, day, timeslots in days|enumerate_dict %}
                     <tr>
-                        <th colspan="{{ timeslots|length|add:1 }}" style="background-color: #aad08b;color: black;"> <h1 style="color: black;">{{ day }} </h1></th>
+                        <th colspan="{{ timeslots|length|add:1 }}" style="background-color: #aad08b;color: black;"> <h1 style="color: black;font-weight: 600;">{{ day }} </h1></th>
                     </tr>
                     <tr style="text-align:center;">
                         {% for timeslot_index, timeslot, details in timeslots|enumerate_dict %}

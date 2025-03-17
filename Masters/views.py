@@ -228,7 +228,7 @@ def timetable_xlsx(request):
                         worksheet.merge_range(row, start_col, row, end_col, timeslot, timeslot_format)
                     row += 2
 
-                    headers = ["Section", "Course", "Course Title", "Faculty Name", "Classroom"]
+                    headers = ["Section", "Course Code", "Course Title", "Faculty Name", "Classroom"]
                     for i, timeslot in enumerate(timeslot_columns):
                         start_col = i * 5
                         for j, header in enumerate(headers):
