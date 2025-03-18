@@ -28,41 +28,41 @@
            <!-- Index Card -->
            <div class="card mb-4" style="padding: 10px;border: 2px solid #b3b3b3;border-radius: 15px;margin-left:0px;">
                <div class="row p-1">
-                   <div class="{% if entity == 'tt' %}col-md-3{% else %}col-md-2{% endif %}">
+                   <div class="col-md-3">
                        <h3> <strong style="color: #5B913B;"> <u>{{name}}</u> </strong></h3>
                    </div>
-                   {% if entity == 'user' %}
-                      <div class="col-md-2">
-                        <form method="GET" action="{% if entity == 'user' %}/register_new_user{% endif %}">
-                            <input type="hidden" name="{% if entity == 'user' %}id{% endif %}" value="0">
-                            <button type="submit"  class="btn btn-md btn-primary">Create</button>
-                        </form>
-                      </div>
-                   {% elif entity == 'tt' %}
-                   <form method="GET"  action="/masters" class=" row col-md-8  shadow"  style="padding:10px; border: 2px solid #b3b3b3;border-radius: 15px;height:60px;">
-                    <div class=" row col-md-12 ">
+                   {% if entity == 'tt' %}
+                     <form method="GET"  action="/masters" class=" row col-md-8  shadow"  style="padding:10px; border: 2px solid #b3b3b3;border-radius: 15px;height:60px;">
+                      <div class=" row col-md-12 ">
+
+                          <div style="flex: 0 0 4.6667%; max-width: 4.6667%;">
+                            <input type="hidden" id="entity" name="entity" value="tt">
+                            <input type="hidden" id="type" name="type" value="i">
+                          </div>
+                          <div class="col-md-4">
+                            <select style="border-radius:10em;" name="class1" id="class1" class="form-control select" required>
+                              <option value="" Selected disabled>--Select Class--</option>
+                              {% for item in class1 %}
+                                  <option value="{{ item.0 }}">{{ item.1 }}</option>
+                              {% endfor %}
+                            </select>   
+                          </div>
+                          <div class="col-md-4">
+                            <input type="date" value="" class="form-control " style="border-radius:10em;"  id="dateid" name="date" required>
+                          </div>
+                          <div class="col-md-2">
+                            <button type="submit"  class="btn btn-md btn-primary">Generate</button>
+                          </div>
                         
-                        <div style="flex: 0 0 4.6667%; max-width: 4.6667%;">
-                          <input type="hidden" id="entity" name="entity" value="tt">
-                          <input type="hidden" id="type" name="type" value="i">
-                        </div>
-                        <div class="col-md-4">
-                          <select style="border-radius:10em;" name="class1" id="class1" class="form-control select" required>
-                            <option value="" Selected disabled>--Select Class--</option>
-                            {% for item in class1 %}
-                                <option value="{{ item.0 }}">{{ item.1 }}</option>
-                            {% endfor %}
-                          </select>   
-                        </div>
-                        <div class="col-md-4">
-                          <input type="date" value="" class="form-control " style="border-radius:10em;"  id="dateid" name="date" required>
-                        </div>
-                        <div class="col-md-2">
-                          <button type="submit"  class="btn btn-md btn-primary">Generate</button>
-                        </div>
-                   
-                    </div>
-                  </form>
+                      </div>
+                    </form>
+                   {% else %}
+                      <div class="col-md-2">
+                       <form method="GET" action="{% if entity == 'user' %}/register_new_user{% endif %}">
+                           <input type="hidden" name="{% if entity == 'user' %}id{% endif %}" value="0">
+                           <button type="submit"  class="btn btn-md btn-primary">Create</button>
+                       </form>
+                      </div>
                    {% endif %}
                </div>  
                <div class="card-body">
@@ -106,6 +106,8 @@
                                   <a href="{% if entity == 'user' %}/register_new_user?id={{ row.0 }} {% elif entity == 'tt' %}/time_table?id={{ row.0 }}{% endif %}" class="btn btn-md btn-primary">Edit</a>
                                   {% if entity == 'tt' %}
                                     <a type="button" href="/timetable_xlsx?id={{ row.0 }}" value="Excel" class="btn btn-md btn-primary" id="btn_excel">Download &nbsp; <i class="fa fa-file-excel"></i></a>
+                                  {% else %}
+                                  <a href="{% if entity == 'user' %}/register_new_user?id={{ row.0 }} {% elif entity == 'tt' %}/time_table?id={{ row.0 }}{% endif %}" class="btn btn-md btn-primary">View</a>
                                   {% endif %}
                                 </td>
                             </tr>

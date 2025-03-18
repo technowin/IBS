@@ -69,12 +69,12 @@ def masters(request):
             header = callproc("stp_get_masters", [entity, type, 'header',user])
             rows = callproc("stp_get_masters",[entity,type,'data',user])
             data = []
-            if (entity == 'tt'): 
-                for row in rows:
-                    encrypted_id = enc(str(row[0]))
-                    data.append((encrypted_id,) + row[1:])
-                class1 = callproc("stp_get_dropdown_values",['class'])
-            else:data = rows
+            # if (entity == 'tt'): 
+            for row in rows:
+                encrypted_id = enc(str(row[0]))
+                data.append((encrypted_id,) + row[1:])
+            class1 = callproc("stp_get_dropdown_values",['class'])
+            # else:data = rows
 
         if request.method=="POST":
             entity = request.POST.get('entity', '')
